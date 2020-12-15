@@ -35,11 +35,13 @@ module Wechatpay
           handle(response.body)
         end
 
-        def verify(response)
+        def verify!(response)
           sign = response.delete(:sign)
           test = sign(response)
           logger.debug { { result: test } }
-          sign == test[:sign]
+          raise Wechatpay::Api::Error, :check_sign_failed unless sign == test[:sign]
+
+          true
         end
 
         def parse(body)
@@ -84,7 +86,8 @@ module Wechatpay
         end
 
         def handle_error(error_code, response)
-          raise ERRORS[error_code] || PayError, response.inspect
+          logger.warn { response.inspect }
+          raise Wechatpay::Api::Error, error_code
         end
 
         def xml(hash)
@@ -106,7 +109,10 @@ module Wechatpay
         end
 
         def merge(params)
-          { mch_id: @mch_id, nonce_str: nonce_str }.merge(params)
+          {
+            appid: appid, mch_id: @mch_id, nonce_str: nonce_str,
+            sign_type: 'MD5'
+          }.merge(params)
         end
 
         def nonce_str
