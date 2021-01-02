@@ -65,45 +65,5 @@ RSpec.describe Wechatpay::Api::V3::Client do
       stub_request :post, /path/
       client.post '/path?a=1', c: 3
     end
-
-    it :update_certs do
-      key = <<~KEY
-        -----BEGIN PRIVATE KEY-----
-        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC8GFDzYjTWjtJc
-        8WLKyos/P/b+DZc7ywXrxZYpQ3x0jekFrd62Na4M2q1zHGKO5wUEd7u4F+GP9rXp
-        UCCeSKVqY+acA1xAHdldaJlUAscN4PYDvrixCQDMDw5ImbVNvjyKOOQkwnyKWc+3
-        yc4SVs2ir4v2e3/F0NkjmTfAFSpY0xsuqzJh3XMTblnwei9eagp5a1FcAAwk2WBs
-        cP5qBPZhafrsbl/uqP1vu5nUVeRCIdNnojHA6soZeRTdmZNzhSZz0nzqFHwoaIu/
-        XY9WFxise+P//GjrJOddFi4K9Zo9O3YnCluqsRWOS8RgeVmHHxElkl4R59yknqHl
-        6M7pKjXFAgMBAAECggEBAIg6MD7ljJEspWzNIpju8sTfZdqAK10R4HrvAp9mEjg0
-        I2WKlLdwz1rd8ithjnwjEz42HY3qNeJXc07ESqt4v9z696Vcxa5mL+x3+jyfOl1x
-        5Zu2wPrvI1WnPdgVAvuIYT5Wj92TwjFNdKSOkyIzHgHKlFry/QpfBTTEHl2OtrnX
-        A/mgdPyGist9qY9mqu9qkutTl7hCqWm2wUe+M8yExrs2NkdusoEb0eZ+xQUjPNp0
-        Kw0uC0zJiPMw9cx91wbl0Ufy5kpr7ual4K3v1mqkatEdkv2QeZFDzneeIMWaJHp+
-        qfh4HifbpEVPg+J8LkIHdUTot1l9OfB/om2C23FhHaECgYEA8kNKdG+7GfCTf7gg
-        Wz+JUeluOFIQ5NuUqnYvlk8qz2mSAuayF7Rp0O73aNaHDxD7PQyQnOmeive/RYka
-        BVYtQ7dBdRsHpv3vCo0UyJkWxL8agGwilIsnyOECT9etFeZHWB2r4k8XsXJG/Qvo
-        f3aZC1B/e1UUcscmutShcelkn3kCgYEAxsK4QhXc5+PGq3xNPQy4gW5hG7b5u1WW
-        DKXsQeNv0Eultybk/2PbAFQ2f1DKRn5qykbOEw3SMx88CkXK0sOLEYwuUX4KEcpg
-        GCj3jfK1yxZUrRFi4x3c8XaZnNKJO4Tv9jzVNRqWcK0rFPPs+Sl7BL8Kp2XU8WYH
-        AeIH1ulMua0CgYBP3z2h6+Bs6fNHTYZlbyov9l0fdncZbQezt6lyzgEYRv8bs8GN
-        rS6h8tdhGjGHFxsuAoF/KkraGFpYa55HmiTsSXPsTxATz27LNL5gcJCgJz1uj7hK
-        7yIbyYuAlWP8b2KgO5Aa2ea+2yVqck2iEJDeuRh+qgtG2D/9ovLjYoaJSQKBgG2z
-        DNVUkb7epUkCavLV8YNmM2yDeaPeYdmLPjFDYPQavFSwv9UA/N9am1V7dpifrzsD
-        BzvW9fvHMnENAht/V2MQ9oN9x/r3sj/DZJZQretv4L5AiU6GreoLJk86mAlknrhN
-        7PLJQNzhhpSi6FjAfygodK3dc0DkqdttMBx6WSFlAoGBAJ5bBCftHAWpQ50GT/ul
-        X2+fzIAJmgUUEHzTsj0vslFjO0Elq9XK/F/nQ21CVlgiaayBnK0TqnB3/rnQrPqO
-        iO/MI68nzL32nOJCuoGjJH3d0lKE3Zq7ETbQRESuXRKgEChIDPJWLVbnDnRxjaJL
-        nVqsnxMnBPkdSfwu/qh45aDA
-        -----END PRIVATE KEY-----
-      KEY
-      serial_no = '27A837A45BD9E88ABEEBF8A420435AFF32FA1A7F'
-      aes_key = '73qbY766FqqSCrgq2MSCj59F9Rss992Q'
-      client = Wechatpay::Api::V3::Client.new 'wxdf5b88098221e11d', '1559818841', key: aes_key, rsa_key: key, serial_no: serial_no
-      WebMock.disable!
-      client.update_certs
-      client.cert
-      WebMock.enable!
-    end
   end
 end

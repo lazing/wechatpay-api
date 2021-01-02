@@ -55,7 +55,11 @@ module Wechatpay
         end
 
         def verify(headers, body)
-          #TODO: verify
+          sha256 = OpenSSL::Digest::SHA256.new
+          key = cert.certificate.public_key
+          sign = headers['Wechatpay-Signature']
+          data = %w[Wechatpay-Timestamp Wechatpay-Nonce].map { |k| headers[k] }
+          key.verify sha256, sign, data.append(body).join("\n") + "\n"
         end
 
         def cert

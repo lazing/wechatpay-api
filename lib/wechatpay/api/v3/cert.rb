@@ -1,5 +1,6 @@
 require 'multi_json'
 require 'singleton'
+require 'openssl'
 
 module Wechatpay
   module Api
@@ -17,6 +18,7 @@ module Wechatpay
           @expires_at = expire_time
           ec = json[:encrypt_certificate]
           @cert = yield(ec[:ciphertext], ec[:nonce], ec[:associated_data])
+          @certificate = OpenSSL::X509::Certificate.new @cert
         end
 
         def load
