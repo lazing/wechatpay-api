@@ -57,7 +57,7 @@ module Wechatpay
         def verify(headers, body)
           sha256 = OpenSSL::Digest::SHA256.new
           key = cert.certificate.public_key
-          sign = headers['Wechatpay-Signature']
+          sign = Base64.strict_decode64(headers['Wechatpay-Signature'])
           data = %w[Wechatpay-Timestamp Wechatpay-Nonce].map { |k| headers[k] }
           key.verify sha256, sign, data.append(body).join("\n") + "\n"
         end
@@ -83,10 +83,14 @@ module Wechatpay
         end
 
         def sign_with(body, method, path, timestamp, rnd)
-          digest = OpenSSL::Digest::SHA256.new
           str = [method, path, timestamp, rnd, body].join("\n") + "\n"
           logger.debug { "Sign Content: #{str.inspect}" }
-          signed = rsa_key.sign(digest, str)
+          sign_content(str)
+        end
+
+        def sign_content(content)
+          digest = OpenSSL::Digest::SHA256.new
+          signed = rsa_key.sign(digest, content)
           Base64.strict_encode64 signed
         end
 
@@ -104,8 +108,8 @@ module Wechatpay
           ].join(',')
         end
 
-        def decrypt(chipher_text, nonce, auth_data)
-          data = Base64.strict_decode64(chipher_text)
+        def decrypt(cipher_text, nonce, auth_data)
+          data = Base64.strict_decode64(cipher_text)
           dec = dechipher(data, nonce, auth_data)
           dec.update(data[0, data.length - 16]) + dec.final
         end
