@@ -54,7 +54,7 @@ module Wechatpay
           handle resp
         end
 
-        def verify(headers, body)
+        def verify(headers)
           sha256 = OpenSSL::Digest::SHA256.new
           key = cert.certificate.public_key
           sign = Base64.strict_decode64(headers['Wechatpay-Signature'])
@@ -77,7 +77,7 @@ module Wechatpay
         def handle(resp)
           logger.debug { "HANDLE RESPONSE: #{resp.inspect}" }
           data = resp.body
-          return {} unless data && !data.empty?
+          raise :empty_body unless data && !data.empty?
 
           MultiJson.load data, symbolize_keys: true
         end
