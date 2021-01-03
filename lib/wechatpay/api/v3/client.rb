@@ -18,8 +18,8 @@ module Wechatpay
         def initialize(appid, mch_id, **opts)
           @appid = appid
           @mch_id = mch_id
-          @rsa_key = OpenSSL::PKey::RSA.new opts[:rsa_key] if opts[:rsa_key]
-          @serial_no = opts[:serial_no]
+          @rsa_key = OpenSSL::PKey::RSA.new opts[:cert] if opts[:cert]
+          @serial_no = opts[:cert_no]
           @key = opts[:key]
           @site = opts[:site] || 'https://api.mch.weixin.qq.com'
 
@@ -54,7 +54,7 @@ module Wechatpay
           handle resp
         end
 
-        def verify(headers)
+        def verify(headers, body)
           sha256 = OpenSSL::Digest::SHA256.new
           key = cert.certificate.public_key
           sign = Base64.strict_decode64(headers['Wechatpay-Signature'])
@@ -109,9 +109,11 @@ module Wechatpay
         end
 
         def decrypt(cipher_text, nonce, auth_data)
+          raise :cipher_text_invalid if (cipher_text.try(:length) || 0) < 16
+
           data = Base64.strict_decode64(cipher_text)
           dec = dechipher(data, nonce, auth_data)
-          dec.update(data[0, data.length - 16]) + dec.final
+          dec.update(data[0, data.length - 16]).tap { |s| logger.debug "DEC: #{s}" } + dec.final
         end
 
         def dechipher(data, nonce, auth_data)

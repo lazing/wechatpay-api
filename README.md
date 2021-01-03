@@ -26,14 +26,15 @@ Essential configure items and datus from wechat pay 需要从微信支付获取�
   * appid - 公众号ID
   * mchid - 商户号
   * key - 32 bytes secret key to encrypt and decrypt 32字节加解密key
-  * rsa_key - APIv3 certification private key pem, content as string. 从微信支付获取的APIv3证书私钥，内容作为文本输入
+  * cert_no - APIv3 certification serial no. 从微信支付获取的APIv3证书序列号
+  * cert - APIv3 certification private key pem, content as string. 从微信支付获取的APIv3证书私钥，内容作为文本输入
 
 ## Configuration and direct usage
 
 ```ruby
 # initialize with a file like wechatpay-api.rb inside rails config initilizers
 Wechatpay::Api.client do |klass|
-  klass.new 'appid', 'mchid', key: 'key', rsa_key: 'apiv3 certification...'
+  klass.new 'appid', 'mchid', key: 'key', cert: 'apiv3 certification...', cert_no: 'cert_no'
 end
 
 # next in anywhere needs, using get or post, will sign automatic. response body 

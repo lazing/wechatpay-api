@@ -8,9 +8,10 @@ module Wechatpay
       class Cert
         include Singleton
 
-        attr_accessor :expires_at, :serial_no, :cert
+        attr_accessor :expires_at, :serial_no, :cert, :certificate
 
         def update(json)
+          Wechatpay::Api.client.logger.debug { "Cert JSON: #{json}" }
           expire_time = DateTime.parse(json[:expire_time])
           return unless expires_at.nil? || expire_time > expires_at
 
