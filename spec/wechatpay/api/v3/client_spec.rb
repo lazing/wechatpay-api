@@ -2,7 +2,7 @@ require File.expand_path('../../../spec_helper', __dir__)
 
 RSpec.describe Wechatpay::Api::V3::Client do
   let(:client) do
-     Wechatpay::Api::V3::Client.new 'app_id', 'mch_id', rsa_key: rsa_key
+     Wechatpay::Api::V3::Client.new 'app_id', 'mch_id', cert: rsa_key
   end
 
   let(:rsa_key) do
@@ -62,7 +62,7 @@ RSpec.describe Wechatpay::Api::V3::Client do
     end
 
     it :post do
-      stub_request :post, /path/
+      stub_request(:post, /path/).and_return body: '{ "OK": true }'
       client.post '/path?a=1', c: 3
     end
   end

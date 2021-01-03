@@ -109,22 +109,22 @@ module Wechatpay
         end
 
         def decrypt(cipher_text, nonce, auth_data)
-          raise :cipher_text_invalid if (cipher_text.try(:length) || 0) < 16
+          raise :cipher_text_invalid if cipher_text.nil?
 
           data = Base64.strict_decode64(cipher_text)
-          dec = dechipher(data, nonce, auth_data)
+          dec = decipher(data, nonce, auth_data)
           dec.update(data[0, data.length - 16]).tap { |s| logger.debug "DEC: #{s}" } + dec.final
         end
 
-        def dechipher(data, nonce, auth_data)
-          chipher = OpenSSL::Cipher.new 'aes-256-gcm'
-          chipher.decrypt
-          chipher.key = key
-          chipher.iv = nonce
-          chipher.padding = 0
-          chipher.auth_data = auth_data
-          chipher.auth_tag = data[-16, 16]
-          chipher
+        def decipher(data, nonce, auth_data)
+          cipher = OpenSSL::Cipher.new 'aes-256-gcm'
+          cipher.decrypt
+          cipher.key = key
+          cipher.iv = nonce
+          cipher.padding = 0
+          cipher.auth_data = auth_data
+          cipher.auth_tag = data[-16, 16]
+          cipher
         end
       end
     end
