@@ -1,6 +1,7 @@
 # encoding: utf-8
 
-$:.unshift File.expand_path('../lib', __FILE__)
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'wechatpay/api/version'
 
 Gem::Specification.new do |s|
@@ -18,10 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ['lib']
 
   s.add_dependency 'faraday', '~> 1.0'
-  s.add_dependency 'gyoku', '>= 1.0.0'
   s.add_dependency 'multi_json', '~> 1.0'
-  s.add_dependency 'nokogiri', '~> 1.0'
-  s.add_dependency 'nori', '~> 2.0'
 
   s.add_development_dependency 'bundler', '~> 1.0'
   s.add_development_dependency 'guard', '~> 2.0'
