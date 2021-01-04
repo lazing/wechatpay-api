@@ -48,6 +48,7 @@ module Wechatpay
         def post(path, data, **headers)
           body = data.is_a?(Hash) ? MultiJson.dump(data) : data
           resp = connection.post(path, body, headers) do |req|
+            req.headers['Content-Type'] = 'application/json'
             req.headers['Authorization'] = authorization_header('POST', path, body)
             req.headers['Accept'] = 'application/json'
           end
