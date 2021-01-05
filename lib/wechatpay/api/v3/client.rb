@@ -77,6 +77,8 @@ module Wechatpay
 
         def handle(resp)
           logger.debug { "HANDLE RESPONSE: #{resp.inspect}" }
+          raise :response_error unless resp.success?
+
           data = resp.body
           raise :empty_body unless data && !data.empty?
 
