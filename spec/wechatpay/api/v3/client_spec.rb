@@ -44,7 +44,7 @@ RSpec.describe Wechatpay::Api::V3::Client do
   let(:timestamp) { 1554208460 }
   let(:rnd) { '593BEC0C930BF1AFEB40B4A08C8FB242' }
   let(:signature) { 'XGHnYxdaYCCk9XF1nwSDZZHil6451ExdOeCtie5Qia1P4xxdy/Zqx+l/MYAGX24gqU6TWZReBFNpOi64/vH4kbcD7GLgjn9lCVXaad+fQHfIa9zjCvzquiHjeWM4guTzIKJ9tXjzaZQU7bLqh4j39ocMf6ONP+UBSKI+PIp9sxWi7ZO69rVsTSxWk7C5LpPIyG/cW9/ivxWVpCtdL0fxomvK3PVOVAbFN7wsm4KDStc2Ci8k/yTYMEK9/VJsgjcZtAzu/BCa/Sxqsep/p2m0ud8aWSkXXILHv77eVvioF+eHcdGLTHEjH9SsgdYg11PQ7EJ+CP5TYx+4eWTL+RELrQ==' }
-
+  
   context :sign do
     it :sign do
       s = client.sign_with(body, method, path, timestamp, rnd)

@@ -19,11 +19,12 @@ module Wechatpay
           @expires_at = expire_time
           ec = json[:encrypt_certificate]
           @cert = yield(ec[:ciphertext], ec[:nonce], ec[:associated_data])
+          Wechatpay::Api.client.logger.debug { "cert: #{@cert}" }
           @certificate = OpenSSL::X509::Certificate.new @cert
         end
 
         def load
-          return false if cert.nil? || expires_at < DateTime.now
+          return false if cert.nil? || certificate.nil? || expires_at < DateTime.now
 
           self
         end
